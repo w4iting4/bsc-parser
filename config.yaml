@@ -1,0 +1,109 @@
+# BSC事件监听器配置文件
+# 基于TokenManager2 V2合约的完整事件监听配置
+
+# 网络配置
+network:
+  name: "BSC Mainnet"
+  wss_url: "wss://bsc-ws.bnbchain.org/ws"
+  # 备用节点列表
+  fallback_urls:
+    - "wss://bsc-mainnet.nodereal.io/ws/v1/1659dfb40aa24bbb8153a677b98064d7"
+    - "wss://rpc.ankr.com/bsc_rpc_call_wsc"
+  chain_id: 56
+  reconnect_interval: 5s
+  timeout: 30s
+
+# 合约配置
+contract:
+  address: "0x5c952063c7fc8610FFDB798152D69F0B9550762b"  # TokenManager2 V2
+  abi_file: "abi/TokenManager2.lite.abi"
+  name: "TokenManager2"
+  version: "v2"
+
+# 监听配置
+monitoring:
+  start_block: "latest"  # latest, earliest, 或具体区块号
+  batch_size: 1000       # 历史数据批量处理大小
+  
+  # 基于实际ABI的完整事件列表 (7个事件)
+  events:
+    # 🔥 核心业务事件 - Demo阶段启用
+    - name: "TokenCreate"
+      enabled: true
+      description: "代币创建事件 - 包含完整代币信息"
+      priority: "critical"
+      
+    - name: "TokenPurchase" 
+      enabled: true
+      description: "代币购买事件 - 完整交易数据"
+      priority: "critical"
+      
+    - name: "TokenSale"
+      enabled: true
+      description: "代币出售事件 - 完整交易数据"
+      priority: "critical"
+    
+    # 📊 重要业务事件 - Demo阶段可选
+    - name: "LiquidityAdded"
+      enabled: false  # Demo阶段先关闭，减少输出
+      description: "流动性添加事件 - 里程碑事件"
+      priority: "high"
+      
+    - name: "TradeStop"
+      enabled: false  # Demo阶段先关闭
+      description: "交易停止事件 - 风控预警"
+      priority: "medium"
+    
+    # 🔍 辅助事件 - Demo阶段关闭
+    - name: "TokenPurchase2"
+      enabled: false  # 只有origin字段，信息量少
+      description: "购买辅助事件 - 内部追踪"
+      priority: "low"
+      
+    - name: "TokenSale2"
+      enabled: false  # 只有origin字段，信息量少
+      description: "出售辅助事件 - 内部追踪"
+      priority: "low"
+
+# 输出配置
+output:
+  console:
+    enabled: true
+    format: "pretty"      # pretty, json, simple
+    show_timestamp: true
+    show_block_info: true
+    show_tx_hash: true
+    color: true
+  
+  file:
+    enabled: false        # Demo阶段不写文件
+    path: "logs/events.log"
+    rotation: "daily"
+    max_size: "100MB"
+
+# 调试和开发配置
+debug:
+  enabled: true
+  log_raw_events: false  # 是否打印原始事件日志
+  show_event_signatures: false  # 显示事件签名
+  verbose: true
+
+# 性能配置
+performance:
+  max_connections: 1     # Demo阶段只用一个连接
+  buffer_size: 1000      # 事件缓冲区大小
+  worker_count: 1        # 处理工作协程数量
+
+# 过滤配置 (可选)
+filters:
+  # 只监听特定代币 (留空表示监听所有)
+  token_addresses: []
+  
+  # 最小交易金额过滤 (BNB, 0表示不过滤)
+  min_transaction_value: 0
+  
+  # 时间范围过滤
+  time_filter:
+    enabled: false
+    start_time: ""
+    end_time: ""
