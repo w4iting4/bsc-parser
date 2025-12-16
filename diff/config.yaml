@@ -1,0 +1,43 @@
+# BSC节点测速工具配置文件
+
+# 测试配置
+benchmark:
+  duration: 20s              # 测试持续时间 (临时调短用于测试)
+  report_interval: 10s       # 中间报告间隔
+  connection_timeout: 30s    # 连接超时时间
+  
+# 网络配置
+network:
+  chain_id: 56              # BSC主网链ID
+  name: "BSC Mainnet"
+
+# 测试节点列表
+nodes:
+  - name: "BSC官方"
+    url: "wss://go.getblock.io/"
+    description: "Binance官方WebSocket节点"
+    
+  - name: "NodeReal"
+    url: "wss://bsc-mainnet.nodereal.io/ws/v1/1659dfb40aa24bbb8153a677b98064d7"
+    description: "NodeReal提供的BSC节点"
+    
+  - name: "Ankr"
+    url: "wss://rpc.ankr.com/bsc_rpc_call_wsc"
+    description: "Ankr提供的BSC节点"
+    
+  - name: "QuickNode"
+    url: "wss://few-warmhearted-grass.bsc.discover.quiknode.pro"
+    description: "QuickNode BSC节点"
+
+# 统计配置
+statistics:
+  track_block_gaps: true     # 是否跟踪区块间隔
+  calculate_latency: true    # 是否计算延迟
+  show_raw_data: false       # 是否显示原始数据
+
+# 输出配置
+output:
+  show_realtime: true        # 显示实时数据
+  show_periodic_report: true # 显示周期报告
+  show_final_summary: true   # 显示最终总结
+  timestamp_format: "15:04:05.000" # 时间戳格式
